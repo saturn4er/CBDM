@@ -3,7 +3,7 @@ import subprocess
 
 from core import sys_config
 from core.Dependencies.library_module import LibraryModule
-from core.Tasks import fs
+from core.BasicLibs import fs
 
 
 class SevenZ:

@@ -4,7 +4,7 @@ import re
 import sys
 
 import core.Dependencies.library_module as l_m
-from core.Tasks import fs
+from core.BasicLibs import fs
 
 
 class Repo:

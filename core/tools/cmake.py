@@ -5,8 +5,8 @@ import subprocess
 import config
 from core import sys_config
 from core.Dependencies.library_module import LibraryModule
-from core.Tasks import fs
-from core.Tasks.fs import require_full_path
+from core.BasicLibs import fs
+from core.BasicLibs.fs import require_full_path
 from core.TemporaryDir import TemporaryDir
 
 cmake_program = ''

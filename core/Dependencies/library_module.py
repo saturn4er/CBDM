@@ -4,14 +4,11 @@ import json
 
 from core.TemporaryDir import TemporaryDir
 import core.sys_config as s_config
-import core.default_structures as structs
 
 project_location = os.getcwd() + os.path.sep
 
 
 class LibraryModule:
-    results = structs.default_dependency_struct.copy()
-
     def __init__(self, module_name, configs):
         self.module_name = module_name
         self.module_location = project_location + s_config.modules_location.format(module_name=module_name)
@@ -104,11 +101,9 @@ class LibraryModule:
         return attr if attr_is_func else False
 
     def write_results(self):
-        LibraryModule.results = structs.default_dependency_struct.copy()
         TemporaryDir.enter(self.full_module_location)
         fnc = self.function_in_tasks_exist(s_config.module_integration_function)
         if bool(fnc):
             fnc(self.module_configs)
 
         TemporaryDir.leave()
-        return LibraryModule.results

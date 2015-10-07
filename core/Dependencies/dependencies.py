@@ -16,7 +16,7 @@ class Dependencies:
         library_module.prepare()
         library_module.write_results()
 
-    def build_dependencies(self):
+    def run_tasks(self):
         starts = int(time.time())
         dependencies_count = len(config.dependencies)
         for i, name in enumerate(config.dependencies):

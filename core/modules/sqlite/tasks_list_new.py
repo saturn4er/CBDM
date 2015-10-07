@@ -3,7 +3,7 @@ import os
 from config import directories
 from core.common_defs import is_windows
 from core.default_structures import cleanup_extensions
-from core.Tasks import check_dependencies, fs, net, archives, assembly, cmake
+from core.BasicLibs import check_dependencies, fs, net, archives, assembly, cmake
 from core.tools.cmake import Cmake, CmakeBuilder
 
 origin_dir = 'Origin'

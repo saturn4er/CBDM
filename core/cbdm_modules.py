@@ -4,7 +4,7 @@ import core.common_defs as defs
 import core.cbdm_repositories as repos
 from core import sys_config
 from core.Dependencies.library_module import LibraryModule
-from core.Tasks import vcs, fs
+from core.BasicLibs import vcs, fs
 
 help_message = defs.load_message('cbdm_module_help')
 
