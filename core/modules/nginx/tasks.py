@@ -25,6 +25,13 @@ def download_zlib(version):
     archives.extract_tar(pcreLoc, "temp")
     fs.rename("temp/zlib-*", "temp/zlib", True)
 
+def download_openssl(version):
+    opensslUrl = "ftp://ftp.openssl.org/source/openssl-{0}.tar.gz".format(version)
+    opensslPath= net.download_file(opensslUrl)
+    archives.extract_tar(opensslPath, "temp")
+    fs.rename("temp/openssl-*", "temp/openssl", True)
+
+# --with-http_ssl_module --conf-path=/etc/nginx/nginx.conf --pid-path=/var/run/nginx.pid --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www --group=www --with-zlib=../zlib --with-pcre=../pcre
 
 def configure():
     configure_params = {
@@ -36,10 +43,10 @@ def configure():
         '--group': 'www',
         '--with-zlib': '../zlib',
         '--with-pcre': '../pcre',
+        '--with-openssl': '../openssl'
 
     }
-    configure_inline_params = ['--with-http_ssl_module']
-    assembly.configure("temp/nginx/", configure_params, configure_inline_params)
+    assembly.configure("temp/nginx/", configure_params, [])
 
 
 def make():
@@ -79,6 +86,7 @@ def create_www_user():
 def build(module_params):
     fs.remove("log")
     fs.remove("temp")
+    download_openssl(module_params['openssl_version'])
     download_nginx(module_params['version'])
     download_pcre(module_params['pcre_version'])
     download_zlib(module_params['zlib_version'])

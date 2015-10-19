@@ -13,7 +13,7 @@ from core.BasicLibs.system import sudo
 __author__ = 'saturn4er'
 
 
-def configure(directory, params, inline_params=[], log_file=False):
+def configure(directory, params={}, inline_params=[], log_file=False):
     print("Run configure script in " + directory)
     params_str = " ".join(["{0}={1}".format(key, val) for key, val in params.items()])
     params_str += " " + " ".join(inline_params)

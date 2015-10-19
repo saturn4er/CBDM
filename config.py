@@ -13,6 +13,7 @@ dependencies = {
         'version': '1.5.4',
         'zlib_version': '1.2.8',
         'pcre_version': '8.37',
+        'openssl_version': '1.0.2d',
         'rebuild': True
     },
     # 'nodejs': {
