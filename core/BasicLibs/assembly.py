@@ -113,8 +113,9 @@ def set_vcxproj_platform_toolset_and_rl(path_to_vcxproj, platform_toolset, runti
     set_vcxproj_platform_toolset(path_to_vcxproj, platform_toolset)
     set_vcxproj_runtime_library(path_to_vcxproj, runtime_library)
 
+
 def get_dist():
-    distro = platform.dist()
+    distro = platform.dist()[0]
     return distro.split(" ")[0]
 
 
