@@ -1,6 +1,6 @@
 import os
 import subprocess
-import sys, pwd, grp
+import sys, pwd, platform
 
 from config import directories
 from core.BasicLibs import net, archives, fs, assembly, system
@@ -53,6 +53,29 @@ def make():
         sys.exit(1)
 
 
+def copy_init_d_script():
+    if(assembly.get_dist() == 'centos'):
+        init_script = "nginx_default_centos.sh"
+    else:
+        init_script = "nginx_default.sh"
+    fs.copy("configs/"+init_script, "/etc/init.d/nginx", True, True)
+    system.chmod("/etc/init.d/nginx", "a+x", True)
+
+
+def change_configs():
+    fs.copy("nginx.conf", "/etc/nginx/nginx.conf", True, True)
+    if os.path.exists("/etc/nginx/configs"):
+        system.sudo(["rm", "-rf", "/etc/nginx/configs"])
+    system.sudo(["mkdir", "/etc/nginx/configs"])
+
+
+def create_www_user():
+    try:
+        pwd.getpwnam('www')
+    except KeyError:
+        system.sudo(["useradd", "-M", "www"])
+
+
 def build(module_params):
     fs.remove("log")
     fs.remove("temp")
@@ -61,20 +84,14 @@ def build(module_params):
     download_zlib(module_params['zlib_version'])
     configure()
     make()
+    copy_init_d_script()
+    change_configs()
+    create_www_user()
     fs.remove("temp")
-    fs.copy("nginx_default.sh", "/etc/init.d/nginx", True, True)
-    system.chmod("/etc/init.d/nginx", "a+x", True)
-    fs.copy("nginx.conf", "/etc/nginx/nginx.conf", True, True)
-    if os.path.exists("/etc/nginx/configs"):
-        system.sudo(["rm", "-rf", "/etc/nginx/configs"])
-    system.sudo(["mkdir", "/etc/nginx/configs"])
-    try:
-        pwd.getpwnam('www')
-    except KeyError:
-        system.sudo(["useradd", "-M", "www"])
 
-    try:
-        grp.getgrnam('www')
-    except KeyError:
-        system.sudo(["groupadd", "www"])
+
+
+
+
+
 

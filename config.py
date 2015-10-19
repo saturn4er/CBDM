@@ -13,10 +13,9 @@ dependencies = {
         'version': '1.5.4',
         'zlib_version': '1.2.8',
         'pcre_version': '8.37',
-        'rebuild': False
-    },
-    'bind': {
-        'version': '9.10.3',
         'rebuild': True
-    }
+    },
+    # 'nodejs': {
+    #     'rebuild': True
+    # }
 }

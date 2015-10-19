@@ -113,9 +113,13 @@ def set_vcxproj_platform_toolset_and_rl(path_to_vcxproj, platform_toolset, runti
     set_vcxproj_platform_toolset(path_to_vcxproj, platform_toolset)
     set_vcxproj_runtime_library(path_to_vcxproj, runtime_library)
 
+def get_dist():
+    distro = platform.dist()
+    return distro.split(" ")[0]
+
 
 def install_distro_dependencies(dependencies):
-    distro = platform.dist()[0]
+    distro = get_dist()
     package_manager_install_command = {
         "Ubuntu": ['apt-get', 'install', "-y"],
         "Centos": ["yum", 'install', '-y']
