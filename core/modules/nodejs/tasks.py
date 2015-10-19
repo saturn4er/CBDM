@@ -7,10 +7,9 @@ from core.BasicLibs import net, archives, fs, assembly, system
 from core.BasicLibs.system import sudo
 
 
-def download_nginx(version):
-    archiveLoc = net.download_file("http://nginx.org/download/nginx-{0}.tar.gz".format(version))
+def download(version):
+    archiveLoc = net.download_file("https://nodejs.org/dist/v{0}/node-v{0}.tar.gz".format(version))
     archives.extract_tar(archiveLoc, "temp")
-    fs.rename("temp/nginx-*", "temp/nginx", True)
 
 
 def download_pcre(version):
@@ -54,27 +53,17 @@ def make():
 
 
 def build(module_params):
+
     fs.remove("log")
     fs.remove("temp")
-    download_nginx(module_params['version'])
-    download_pcre(module_params['pcre_version'])
-    download_zlib(module_params['zlib_version'])
-    configure()
-    make()
-    fs.remove("temp")
-    fs.copy("nginx_default.sh", "/etc/init.d/nginx", True, True)
-    system.chmod("/etc/init.d/nginx", "a+x", True)
-    fs.copy("nginx.conf", "/etc/nginx/nginx.conf", True, True)
-    if os.path.exists("/etc/nginx/configs"):
-        system.sudo(["rm", "-rf", "/etc/nginx/configs"])
-    system.sudo(["mkdir", "/etc/nginx/configs"])
-    try:
-        pwd.getpwnam('www')
-    except KeyError:
-        system.sudo(["useradd", "-M", "www"])
-
-    try:
-        grp.getgrnam('www')
-    except KeyError:
-        system.sudo(["groupadd", "www"])
+    download(module_params['version'])
+    # download_pcre(module_params['pcre_version'])
+    # download_zlib(module_params['zlib_version'])
+    # configure()
+    # make()
+    # TODO: download init.d script
+    # fs.remove("temp")
+    # fs.copy("nginx_default.sh", "/etc/init.d/nginx", True, True)
+    # system.chmod("/etc/init.d/nginx", "a+x", True)
+    # fs.copy("nginx.conf", "/etc/nginx/nginx.conf", True, True)
 

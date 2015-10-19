@@ -1,13 +1,13 @@
 import os
 import subprocess
 import sys
-from core.common_defs import is_windows
+from core.common_defs import is_windows, is_linux
 import getpass
 
 rootPass = ""
 
 
-def gain_password():
+def gain_sudo_password():
     global rootPass
     user_id = os.getuid()
 
@@ -23,7 +23,7 @@ def gain_password():
 
 
 def sudo(command, stdout=None, stderr=None, stdlog=True):
-    gain_password()
+    gain_sudo_password()
     user_id = os.getuid()
     if stdlog:
         print("Running '{0}' as sudo. ".format(" ".join(command)), end="")
@@ -39,8 +39,20 @@ def sudo(command, stdout=None, stderr=None, stdlog=True):
     return proc
 
 
+def chmod(file, value, forceBySudo=False):
+    if not is_linux():
+        print("Try to change permissions on windows-based system", file=sys.stderr)
+        return
+    if forceBySudo:
+        sudo(["chmod", value, file])
+    else:
+        os.chmod(file, value)
+
+
 def set_system_variable(var_name, var_value):
     if is_windows():
         shell = True
         with open('setx.log', 'a+') as log_file:
             subprocess.Popen(['setx', var_name, var_value], stdout=log_file, stderr=log_file, shell=shell)
+
+

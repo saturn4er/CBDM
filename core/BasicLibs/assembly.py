@@ -116,9 +116,11 @@ def set_vcxproj_platform_toolset_and_rl(path_to_vcxproj, platform_toolset, runti
 
 def install_distro_dependencies(dependencies):
     distro = platform.dist()[0]
-    package_manager = {"Ubuntu": 'apt-get'}
-    command = 'gksudo -S "{tool} install -y ' + " ".join(dependencies) + '"'
-    command = command.format(tool=package_manager[distro])
-    with open('install_deps.log', 'a+') as log:
-        dep_process = subprocess.Popen(command, shell=True, stderr=log, stdout=log)
+    package_manager_install_command = {
+        "Ubuntu": ['apt-get', 'install', "-y"],
+        "Centos": ["yum", 'install', '-y']
+    }
+    command = package_manager_install_command[distro] + dependencies
+    with open('log/install_deps.log', 'a+') as log:
+        dep_process = sudo(command, stderr=log, stdout=log)
         dep_process.communicate()

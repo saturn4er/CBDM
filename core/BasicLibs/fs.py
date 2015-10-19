@@ -2,7 +2,7 @@ from shutil import rmtree, move, copytree, copyfile
 from glob import glob
 import os
 from config import directories
-
+from core.BasicLibs import system
 from core import sys_config
 
 
@@ -63,8 +63,10 @@ def rename(mask, new_name, overwrite=False):
     require_full_path(new_name)
 
     if os.path.isdir(file):
+        print("Moving directory {0} to {1}".format(file, new_name))
         move(file, new_name)
     elif os.path.isfile(file):
+        print("Moving file {0} to {1}".format(file, new_name))
         os.rename(file, new_name)
 
 
@@ -134,18 +136,23 @@ def remove_empty_folders(from_directory):
         remove_empty_folders_system(from_directory, log_file)
 
 
-def copy(path_to_file_or_dir, destination, overwrite):
+def copy(path_to_file_or_dir, destination, overwrite=False, sudo=False):
     file = path_to_file_or_dir
 
     if os.path.exists(destination):
         if overwrite:
-            remove(destination)
+            if sudo:
+                system.sudo(["rm", "-rf", destination])
+            else:
+                remove(destination)
         else:
             raise Exception('Destination file "%s" exists' % destination)
 
     require_full_path(destination)
-
-    if os.path.isdir(file):
-        copytree(file, destination)
-    elif os.path.isfile(file):
-        copyfile(file, destination)
+    if sudo:
+        system.sudo(["cp", "--remove-destination", path_to_file_or_dir, destination])
+    else:
+        if os.path.isdir(file):
+            copytree(file, destination)
+        elif os.path.isfile(file):
+            copyfile(file, destination)
